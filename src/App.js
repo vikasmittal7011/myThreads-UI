@@ -1,13 +1,14 @@
 import { Container } from '@chakra-ui/react';
 import { Route, Routes } from 'react-router-dom';
-import { UserPost, UserProfile } from './pages';
+import { Home, UserPost, UserProfile } from './pages';
 
 function App() {
   return (
     <Container textAlign="center" fontSize="xl">
       <Routes>
-        <Route exact path="/:id" element={<UserProfile />} />
-        <Route exact path="/:id/post/:postId" element={<UserPost />} />
+        <Route exact path="/" element={<Home />} />
+        <Route exact path="/:username" element={<UserProfile />} />
+        <Route exact path="/:username/post/:postId" element={<UserPost />} />
       </Routes>
     </Container>
   );
