@@ -86,7 +86,7 @@ const Posts = () => {
               />
             </Flex>
           </Flex>
-          <Text fontSize="sm">About post </Text>
+          <Text textAlign="start" fontSize="sm">About post </Text>
           <Box
             borderRadius={6}
             overflow="hidden"

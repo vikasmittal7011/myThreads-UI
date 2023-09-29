@@ -2,7 +2,7 @@ import { Flex } from '@chakra-ui/react';
 
 const Actions = ({ liked, handleLikeAndUnlike }) => {
   return (
-    <Flex gap={3} my={2} onClick={e => e.preventDefault()}>
+    <Flex gap={3} my={2} onClick={e => e.preventDefault()} cursor="pointer">
       <svg
         aria-label="Like"
         color={liked ? 'rgb(237, 73, 86)' : ''}
