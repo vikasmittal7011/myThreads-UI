@@ -5,6 +5,7 @@ import * as ReactDOM from 'react-dom/client';
 import App from './App';
 import { BrowserRouter } from 'react-router-dom';
 import './index.css';
+import { RecoilRoot } from 'recoil';
 
 const container = document.getElementById('root');
 const root = ReactDOM.createRoot(container);
@@ -35,10 +36,12 @@ const theme = extendTheme({ config, styles, colors });
 root.render(
   <StrictMode>
     <ChakraProvider theme={theme}>
-      <BrowserRouter>
-        <ColorModeScript />
-        <App />
-      </BrowserRouter>
+      <RecoilRoot>
+        <BrowserRouter>
+          <ColorModeScript />
+          <App />
+        </BrowserRouter>
+      </RecoilRoot>
     </ChakraProvider>
   </StrictMode>
 );
