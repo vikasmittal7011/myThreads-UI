@@ -1,11 +1,6 @@
 import {
   Flex,
   Box,
-  FormControl,
-  FormLabel,
-  Input,
-  InputGroup,
-  InputRightElement,
   Stack,
   Button,
   Heading,
@@ -14,13 +9,72 @@ import {
   Link,
 } from '@chakra-ui/react';
 import { useState } from 'react';
-import { ViewIcon, ViewOffIcon } from '@chakra-ui/icons';
 import { useSetRecoilState } from 'recoil';
 import authScreenAtom from '../../atoms/authAtom';
+import userAtom from '../../atoms/userAtom';
+import InputBox from '../form/InputBox';
+import PasswordBox from '../form/PasswordBox';
+import useToastBox from '../../hooks/useToastBox';
+import { useNavigate } from 'react-router-dom';
+import useFetchApiCall from '../../hooks/useFetchApiCall';
 
 export default function SignIn() {
-  const [showPassword, setShowPassword] = useState(false);
+  const { showToast } = useToastBox();
+  const { apiCall, loading } = useFetchApiCall();
+
+  const navigate = useNavigate();
   const setAuthSrceenState = useSetRecoilState(authScreenAtom);
+  const setUserState = useSetRecoilState(userAtom);
+  const [unvalidData, setUnvalidData] = useState();
+  const [userData, setUserData] = useState({
+    password: '',
+    username: '',
+  });
+
+  const handleUserData = (name, value) => {
+    setUserData({ ...userData, [name]: value });
+    setUnvalidData();
+  };
+
+  const validate = user => {
+    const passwordPattern =
+      /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/;
+
+    if (user.username === '') {
+      setUnvalidData({
+        username: `Enter valie user name`,
+      });
+      return false;
+    } else if (!passwordPattern.test(user.password)) {
+      setUnvalidData({
+        password: `- at least 8 characters\n
+        - must contain at least 1 uppercase letter, 1 lowercase letter, and 1 number\n
+        - Can contain special characters`,
+      });
+      return false;
+    } else {
+      setUnvalidData('');
+      return true;
+    }
+  };
+
+  const singInUser = async () => {
+    const valid = validate(userData);
+
+    let response;
+    if (valid) {
+      response = await apiCall('user/login', 'POST', userData, {
+        'Content-Type': 'application/json',
+      });
+    }
+
+    if (response.success) {
+      showToast('Success', 'Login successfully', 'success');
+      setUserState(response.token);
+      localStorage.setItem('token', response.token);
+      navigate('/');
+    } else showToast('Error', response.message, 'error');
+  };
 
   return (
     <Flex align={'center'} justify={'center'} width="full">
@@ -37,37 +91,31 @@ export default function SignIn() {
           p={8}
         >
           <Stack spacing={4}>
-            <FormControl isRequired>
-              <FormLabel>Email address</FormLabel>
-              <Input type="email" />
-            </FormControl>
-            <FormControl isRequired>
-              <FormLabel>Password</FormLabel>
-              <InputGroup>
-                <Input type={showPassword ? 'text' : 'password'} />
-                <InputRightElement h={'full'}>
-                  <Button
-                    variant={'ghost'}
-                    onClick={() =>
-                      setShowPassword(showPassword => !showPassword)
-                    }
-                  >
-                    {showPassword ? <ViewIcon /> : <ViewOffIcon />}
-                  </Button>
-                </InputRightElement>
-              </InputGroup>
-            </FormControl>
+            <InputBox
+              label="User name"
+              type="email"
+              onChange={handleUserData}
+              value={userData.username}
+              name="username"
+              error={unvalidData?.username}
+            />
+            <PasswordBox
+              onChange={handleUserData}
+              value={userData.password}
+              error={unvalidData?.password}
+            />
             <Stack spacing={10} pt={2}>
               <Button
-                loadingText="Submitting"
                 size="lg"
                 bg={useColorModeValue('gray.600', 'gray.700')}
                 color={'white'}
                 _hover={{
                   bg: useColorModeValue('gray.700', 'gray.800'),
                 }}
+                onClick={singInUser}
+                isDisabled={loading}
               >
-                Sign up
+                {loading ? 'Loading...' : 'Sign up'}
               </Button>
             </Stack>
             <Stack pt={6}>
