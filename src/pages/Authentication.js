@@ -6,7 +6,6 @@ import SignIn from '../components/auth/SignIn';
 
 const Authentication = () => {
   const authSrceenState = useRecoilValue(authScreenAtom);
-  console.log(authSrceenState);
   return (
     <>
       <NavBar />

@@ -62,7 +62,7 @@ const Header = () => {
       <Text fontSize="xl">Description of user</Text>
       <Flex width={'full'} justifyContent={'space-between'}>
         <Flex gap={2} alignItems={'center'}>
-          <Text fontSize="md" color={'gray.light'} F>
+          <Text fontSize="md" color={'gray.light'}>
             followers
           </Text>
           <Box width={1} height={1} bg={'gray.light'} borderRadius={'full'} />
