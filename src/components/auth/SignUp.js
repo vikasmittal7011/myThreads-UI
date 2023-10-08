@@ -85,8 +85,9 @@ export default function SignUp() {
       showToast('Success', 'Sign up successfully', 'success');
       setUserState(response.token);
       localStorage.setItem('token', response.token);
+      localStorage.setItem('id', response.id);
       navigate('/');
-    } else showToast('Error', response.message, 'error');
+    }
   };
 
   return (

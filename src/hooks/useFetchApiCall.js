@@ -1,6 +1,9 @@
 import { useState } from 'react';
 
+import useToastBox from './useToastBox';
+
 const useFetchApiCall = () => {
+  const { showToast } = useToastBox();
   const [loading, setLoading] = useState(false);
 
   const apiCall = async (
@@ -28,9 +31,14 @@ const useFetchApiCall = () => {
       const response = await fetch(process.env.REACT_APP_API + api, options);
       setLoading(false);
 
-      return await response.json();
+      const data = await response.json();
+      if (data.success) {
+        return data;
+      } else {
+        return showToast('Error', response.message, 'error');
+      }
     } catch (err) {
-      return err.message;
+      showToast('Error', err.message, 'error');
     }
   };
 

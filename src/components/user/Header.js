@@ -1,6 +1,7 @@
 import {
   Avatar,
   Box,
+  Button,
   Flex,
   Link,
   Menu,
@@ -10,24 +11,21 @@ import {
   Portal,
   Text,
   VStack,
-  useToast,
 } from '@chakra-ui/react';
 import { AiOutlineInstagram } from 'react-icons/ai';
 import { CgMoreO } from 'react-icons/cg';
+import { Link as NavLink } from 'react-router-dom';
 
-const Header = () => {
-  const toast = useToast();
+import useToastBox from '../../hooks/useToastBox';
+
+const Header = ({ user, handleFollowAndUnfollow, loading }) => {
+  const id = localStorage.getItem('id');
+  const { showToast } = useToastBox();
 
   const copyURL = () => {
     const currentLocation = window.location.href;
     navigator.clipboard.writeText(currentLocation).then(() => {
-      toast({
-        title: 'URL is copyed',
-        description: currentLocation,
-        status: 'success',
-        duration: 3000,
-        isClosable: true,
-      });
+      showToast('URL is copyed', currentLocation);
     });
   };
 
@@ -36,10 +34,10 @@ const Header = () => {
       <Flex justifyContent={'space-between'} w="full">
         <Box>
           <Text fontWeight={'bold'} fontSize="2xl">
-            Name of user
+            {user?.name}
           </Text>
           <Flex alignItems="center" gap={2}>
-            <Text fontSize="sm">username of user</Text>
+            <Text fontSize="sm">{user?.username}</Text>
             <Text
               fontSize="xs"
               bg={'gray.dark'}
@@ -52,18 +50,23 @@ const Header = () => {
           </Flex>
         </Box>
         <Box>
-          <Avatar
-            src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQPfO37MK81JIyR1ptwqr_vYO3w4VR-iC2wqQ&usqp=CAU"
-            size={'xl'}
-            name="random"
-          />
+          <Avatar src={user?.image} size={'xl'} name={user?.name} />
         </Box>
       </Flex>
-      <Text fontSize="xl">Description of user</Text>
+      <Text fontSize="xl">{user?.bio}</Text>
+      {user?.id === id ? (
+        <Button>
+          <NavLink to="/update-profile">Update Profile</NavLink>
+        </Button>
+      ) : (
+        <Button onClick={handleFollowAndUnfollow} isDisabled={loading}>
+          {user?.followers?.includes(id) ? 'UnFollow' : 'Follow'}
+        </Button>
+      )}
       <Flex width={'full'} justifyContent={'space-between'}>
         <Flex gap={2} alignItems={'center'}>
           <Text fontSize="md" color={'gray.light'}>
-            followers
+            {user?.followers?.length} Follow
           </Text>
           <Box width={1} height={1} bg={'gray.light'} borderRadius={'full'} />
           <Link cursor={'pointer'} fontSize="md" color={'gray.light'}>

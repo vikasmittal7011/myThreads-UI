@@ -76,8 +76,6 @@ export default function UpdateProfile() {
       if (response.success) {
         showToast('Success', 'Profile update successfull');
         navigate(`/${response.user.username}`);
-      } else {
-        showToast('Error', response.message || response);
       }
     }
   };
