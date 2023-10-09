@@ -59,7 +59,7 @@ const Header = ({ user, handleFollowAndUnfollow, loading }) => {
           <NavLink to="/update-profile">Update Profile</NavLink>
         </Button>
       ) : (
-        <Button onClick={handleFollowAndUnfollow} isDisabled={loading}>
+        <Button onClick={handleFollowAndUnfollow} isLoading={loading}>
           {user?.followers?.includes(id) ? 'UnFollow' : 'Follow'}
         </Button>
       )}

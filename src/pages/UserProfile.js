@@ -1,20 +1,21 @@
 import { useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
-import { Text } from '@chakra-ui/react';
 
 import usefetchApiCall from '../hooks/useFetchApiCall';
 import NavBar from '../components/common/NavBar';
 import Header from '../components/user/Header';
 import Posts from '../components/user/Posts';
 import Loader from '../components/common/Loader';
+import { Text } from '@chakra-ui/react';
 
 const UserProfile = () => {
-  const { apiCall, loading } = usefetchApiCall();
+  const { apiCall } = usefetchApiCall();
   const username = useParams().username;
 
   const [user, setUser] = useState('nothing');
-  const [error, setError] = useState('');
   const [posts, setPosts] = useState();
+  const [loading, setLoading] = useState(false);
+  const [postLoading, setPostLoading] = useState(false);
 
   const fetchUserProfile = async () => {
     const response = await apiCall(`user/profile/${username}`);
@@ -22,15 +23,16 @@ const UserProfile = () => {
       setUser(response.user);
     } else {
       setUser('Not found');
-      setError(response.message);
     }
   };
 
   const fetchUserPost = async () => {
+    setPostLoading(true);
     const response = await apiCall(`post/user-post/${user.id}`);
     if (response.success || response) {
       setPosts(response.posts);
     }
+    setPostLoading(false);
   };
 
   useEffect(() => {
@@ -46,11 +48,13 @@ const UserProfile = () => {
   }, [user]);
 
   const handleFollowAndUnfollow = async () => {
+    setLoading(true);
     const response = await apiCall(`user/followUser/${user.id}`, 'PATCH');
 
     if (response.success || response) {
       fetchUserProfile();
     }
+    setLoading(false);
   };
 
   return (
@@ -60,19 +64,17 @@ const UserProfile = () => {
         <Loader />
       ) : (
         <>
-          {!error ? (
+          {user.name ? (
             <>
-              {user && (
-                <Header
-                  user={user}
-                  loading={loading}
-                  handleFollowAndUnfollow={handleFollowAndUnfollow}
-                />
-              )}
-              <Posts posts={posts} loading={loading} />
+              <Header
+                user={user}
+                loading={loading}
+                handleFollowAndUnfollow={handleFollowAndUnfollow}
+              />
+              <Posts posts={posts} loading={postLoading} />
             </>
           ) : (
-            <Text>{error}</Text>
+            <Text>User Not Found</Text>
           )}
         </>
       )}

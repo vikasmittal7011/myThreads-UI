@@ -177,6 +177,7 @@ export default function UpdateProfile() {
                   bg: 'green.500',
                 }}
                 onClick={hanldeUpdate}
+                isLoading={loading}
               >
                 Submit
               </Button>

@@ -69,8 +69,7 @@ export default function SignIn() {
     }
     if (response.success || response) {
       showToast('Success', 'Login successfully', 'success');
-      setUserState(response.token);
-      localStorage.setItem('token', response.token);
+      setUserState(response.id);
       localStorage.setItem('id', response.id);
       navigate('/');
     }
@@ -113,9 +112,9 @@ export default function SignIn() {
                   bg: useColorModeValue('gray.700', 'gray.800'),
                 }}
                 onClick={singInUser}
-                isDisabled={loading}
+                isLoading={loading}
               >
-                {loading ? 'Loading...' : 'Sign up'}
+                Sign up
               </Button>
             </Stack>
             <Stack pt={6}>

@@ -12,7 +12,6 @@ const useFetchApiCall = () => {
     body = null,
     customHeaders = {
       'Content-Type': 'application/json',
-      Authentication: 'Vikas ' + localStorage.getItem('token'),
     }
   ) => {
     try {
