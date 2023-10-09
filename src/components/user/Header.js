@@ -11,15 +11,19 @@ import {
   Portal,
   Text,
   VStack,
+  useColorModeValue,
 } from '@chakra-ui/react';
 import { AiOutlineInstagram } from 'react-icons/ai';
 import { CgMoreO } from 'react-icons/cg';
 import { Link as NavLink } from 'react-router-dom';
 
 import useToastBox from '../../hooks/useToastBox';
+import { useRecoilValue } from 'recoil';
+import userAtom from '../../atoms/userAtom';
 
 const Header = ({ user, handleFollowAndUnfollow, loading }) => {
-  const id = localStorage.getItem('id');
+  const color = useColorModeValue('gray.600', 'gray.700');
+  const userInfo = useRecoilValue(userAtom);
   const { showToast } = useToastBox();
 
   const copyURL = () => {
@@ -54,13 +58,27 @@ const Header = ({ user, handleFollowAndUnfollow, loading }) => {
         </Box>
       </Flex>
       <Text fontSize="xl">{user?.bio}</Text>
-      {user?.id === id ? (
-        <Button>
+      {user?.id === userInfo.id ? (
+        <Button
+          bg={color}
+          color={'white'}
+          _hover={{
+            bg: color,
+          }}
+        >
           <NavLink to="/update-profile">Update Profile</NavLink>
         </Button>
       ) : (
-        <Button onClick={handleFollowAndUnfollow} isLoading={loading}>
-          {user?.followers?.includes(id) ? 'UnFollow' : 'Follow'}
+        <Button
+          onClick={handleFollowAndUnfollow}
+          isLoading={loading}
+          color={'white'}
+          _hover={{
+            bg: color,
+          }}
+          bg={color}
+        >
+          {user?.followers?.includes(userInfo.id) ? 'UnFollow' : 'Follow'}
         </Button>
       )}
       <Flex width={'full'} justifyContent={'space-between'}>

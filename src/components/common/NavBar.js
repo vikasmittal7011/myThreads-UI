@@ -1,17 +1,20 @@
-import { Button, Flex, Image, useColorMode } from '@chakra-ui/react';
+import { Button, Flex, Image, Link, useColorMode } from '@chakra-ui/react';
 import { FiLogOut } from 'react-icons/fi';
+import { AiFillHome } from 'react-icons/ai';
+import { CgProfile } from 'react-icons/cg';
 
 import dark from '../../assets/dark-logo.svg';
 import light from '../../assets/light-logo.svg';
 import useFetchApiCall from '../../hooks/useFetchApiCall';
 import useToastBox from '../../hooks/useToastBox';
-import { useSetRecoilState } from 'recoil';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
 import userAtom from '../../atoms/userAtom';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link as NavLink } from 'react-router-dom';
 
 const NavBar = () => {
   const { toggleColorMode, colorMode } = useColorMode();
   const setUserState = useSetRecoilState(userAtom);
+  const user = useRecoilValue(userAtom);
 
   const navigate = useNavigate();
 
@@ -22,7 +25,7 @@ const NavBar = () => {
     const response = await apiCall('user/logout', 'POST');
     if (response.success || response) {
       showToast('Sucess', 'Logout successfully');
-      localStorage.removeItem('id');
+      localStorage.removeItem('user');
       setUserState(null);
       navigate('/');
     }
@@ -30,6 +33,11 @@ const NavBar = () => {
 
   return (
     <Flex justifyContent="space-around" mt={6} mb={12}>
+      {user && (
+        <Link as={NavLink} to="/">
+          <AiFillHome size={24} />
+        </Link>
+      )}
       <Image
         cursor="pointer"
         alt="logo"
@@ -37,9 +45,16 @@ const NavBar = () => {
         onClick={toggleColorMode}
         src={colorMode === 'light' ? dark : light}
       />
-      <Button size={'sm'} onClick={logout}>
-        <FiLogOut size={20} />
-      </Button>
+      {user && (
+        <>
+          <Link as={NavLink} to={`/${user.username}`}>
+            <CgProfile size={24} />
+          </Link>
+          <Button size={'sm'} onClick={logout}>
+            <FiLogOut size={20} />
+          </Button>
+        </>
+      )}
     </Flex>
   );
 };

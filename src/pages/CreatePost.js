@@ -72,7 +72,11 @@ const CreatePost = () => {
         right="10"
         leftIcon={<AddIcon />}
         onClick={onOpen}
-        bg={useColorModeValue('gray.300', 'gray.dark')}
+        bg={useColorModeValue('gray.600', 'gray.700')}
+        color={'white'}
+        _hover={{
+          bg: useColorModeValue('gray.700', 'gray.800'),
+        }}
       >
         Posts
       </Button>
@@ -80,7 +84,13 @@ const CreatePost = () => {
         <ModalOverlay />
         <ModalContent>
           <ModalHeader>Create Post</ModalHeader>
-          <ModalCloseButton />
+          <ModalCloseButton
+            bg={useColorModeValue('gray.600', 'gray.700')}
+            color={'white'}
+            _hover={{
+              bg: useColorModeValue('gray.700', 'gray.800'),
+            }}
+          />
           <ModalBody>
             <TextAreaBox
               label="About Post"

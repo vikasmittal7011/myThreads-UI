@@ -83,8 +83,8 @@ export default function SignUp() {
 
     if (response.success || response) {
       showToast('Success', 'Sign up successfully', 'success');
-      setUserState(response.id);
-      localStorage.setItem('id', response.id);
+      setUserState(response.user);
+      localStorage.setItem('user', JSON.stringify(response.user));
       navigate('/');
     }
   };
