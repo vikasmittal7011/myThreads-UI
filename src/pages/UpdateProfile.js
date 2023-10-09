@@ -73,7 +73,7 @@ export default function UpdateProfile() {
         image: imgUrl || userInfo.image,
       };
       const response = await apiCall('user/update', 'PATCH', user);
-      if (response.success) {
+      if (response.success || response) {
         showToast('Success', 'Profile update successfull');
         navigate(`/${response.user.username}`);
       }

@@ -81,7 +81,7 @@ export default function SignUp() {
       });
     }
 
-    if (response.success) {
+    if (response.success || response) {
       showToast('Success', 'Sign up successfully', 'success');
       setUserState(response.token);
       localStorage.setItem('token', response.token);

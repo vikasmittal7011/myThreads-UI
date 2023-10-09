@@ -67,8 +67,7 @@ export default function SignIn() {
         'Content-Type': 'application/json',
       });
     }
-
-    if (response.success) {
+    if (response.success || response) {
       showToast('Success', 'Login successfully', 'success');
       setUserState(response.token);
       localStorage.setItem('token', response.token);

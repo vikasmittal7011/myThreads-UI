@@ -18,7 +18,7 @@ const UserProfile = () => {
 
   const fetchUserProfile = async () => {
     const response = await apiCall(`user/profile/${username}`);
-    if (response.success) {
+    if (response.success || response) {
       setUser(response.user);
     } else {
       setUser('Not found');
@@ -28,7 +28,7 @@ const UserProfile = () => {
 
   const fetchUserPost = async () => {
     const response = await apiCall(`post/user-post/${user.id}`);
-    if (response.success) {
+    if (response.success || response) {
       setPosts(response.posts);
     }
   };
@@ -48,7 +48,7 @@ const UserProfile = () => {
   const handleFollowAndUnfollow = async () => {
     const response = await apiCall(`user/followUser/${user.id}`, 'PATCH');
 
-    if (response.success) {
+    if (response.success || response) {
       fetchUserProfile();
     }
   };

@@ -35,7 +35,8 @@ const useFetchApiCall = () => {
       if (data.success) {
         return data;
       } else {
-        return showToast('Error', response.message, 'error');
+        showToast('Error', data.message, 'error');
+        return false;
       }
     } catch (err) {
       showToast('Error', err.message, 'error');
