@@ -22,7 +22,6 @@ import Loader from '../components/common/Loader';
 
 const UserPost = () => {
   const postId = useParams().postId;
-  console.log(postId);
   const { showToast } = useToastBox();
   const { apiCall, loading } = useFetchApiCall();
 
