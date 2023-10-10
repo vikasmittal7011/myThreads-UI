@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import usefetchApiCall from '../hooks/useFetchApiCall';
 import NavBar from '../components/common/NavBar';
 import Header from '../components/user/Header';
-import Posts from '../components/user/Posts';
+import Posts from '../components/common/Posts';
 import Loader from '../components/common/Loader';
 import { Text } from '@chakra-ui/react';
 
