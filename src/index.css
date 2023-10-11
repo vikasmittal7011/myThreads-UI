@@ -9,3 +9,40 @@
 .icon-container:hover {
   background-color: #1e1e1e;
 }
+
+::-webkit-scrollbar {
+  width: 12px;
+  background-color: #333;
+  border-radius: 6px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #555;
+  border-radius: 6px;
+}
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #888 #555;
+  scrollbar-shadow-color: #555;
+}
+
+body {
+  scrollbar-base-color: #333;
+  scrollbar-arrow-color: #eee;
+  scrollbar-face-color: #888;
+  scrollbar-highlight-color: #eee;
+  scrollbar-shadow-color: #eee;
+  scrollbar-3dlight-color: #eee;
+  scrollbar-darkshadow-color: #888;
+}
+
+body {
+  -ms-overflow-style: -ms-autohiding-scrollbar;
+  scrollbar-color: #888 #555;
+}
