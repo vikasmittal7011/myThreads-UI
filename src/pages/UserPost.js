@@ -7,29 +7,28 @@ import {
   Image,
   Text,
 } from '@chakra-ui/react';
-import NavBar from '../components/common/NavBar';
+import { BsThreeDots } from 'react-icons/bs';
+import { useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
 
 import verified from '../assets/verified.png';
-import { BsThreeDots } from 'react-icons/bs';
+import Loader from '../components/common/Loader';
+import NavBar from '../components/common/NavBar';
 import Actions from '../components/user/Actions';
-import { useState } from 'react';
 import Replies from '../components/user/Replies';
 import useToastBox from '../hooks/useToastBox';
 import useFetchApiCall from '../hooks/useFetchApiCall';
-import { useParams } from 'react-router-dom';
-import { useEffect } from 'react';
-import Loader from '../components/common/Loader';
+import ShowTime from '../components/common/ShowTime';
 
 const UserPost = () => {
   const postId = useParams().postId;
   const { showToast } = useToastBox();
   const { apiCall, loading } = useFetchApiCall();
 
-  const [liked, setLiked] = useState(false);
   const [post, setPost] = useState();
 
-  const handleLike = () => {
-    setLiked(!liked);
+  const updatePost = post => {
+    setPost(post);
   };
 
   const copyURL = () => {
@@ -75,9 +74,7 @@ const UserPost = () => {
                   </Flex>
                 </Flex>
                 <Flex alignItems="center" gap={4}>
-                  <Text fontSize="sm" color="gray.light">
-                    Time
-                  </Text>
+                  <ShowTime time={post.createdAt} />
                   <BsThreeDots cursor="pointer" onClick={copyURL} />
                 </Flex>
               </Flex>
@@ -96,21 +93,7 @@ const UserPost = () => {
                 )}
               </Box>
               <Flex gap={3} my={1} cursor="pointer">
-                <Actions liked={liked} handleLikeAndUnlike={handleLike} />
-              </Flex>
-              <Flex alignItems="center" gap="2">
-                <Text color="gray.light" fontSize="sm">
-                  {post?.replies?.length} replies
-                </Text>
-                <Box
-                  width={0.5}
-                  height={0.5}
-                  bg={'gray.light'}
-                  borderRadius={'full'}
-                />
-                <Text color="gray.light" fontSize="sm">
-                  {post?.likes?.length} likes
-                </Text>
+                <Actions post={post} updatePost={updatePost} />
               </Flex>
               <Divider my="4" />
               <Flex justifyContent="space-between">

@@ -1,9 +1,9 @@
+import { useEffect, useState } from 'react';
+
+import Posts from '../components/common/Posts';
 import NavBar from '../components/common/NavBar';
-import { useState } from 'react';
 import PostType from '../components/Home.js/PostType';
 import useFetchApiCall from '../hooks/useFetchApiCall';
-import { useEffect } from 'react';
-import Posts from '../components/common/Posts';
 
 const Home = () => {
   const { apiCall } = useFetchApiCall();
@@ -30,6 +30,23 @@ const Home = () => {
     setLoading(false);
   };
 
+  const updatePost = post => {
+    let index, selectingPost;
+    if (selectedPost === 'all') {
+      index = allPosts.findIndex(p => post.id === p.id);
+      selectingPost = [...allPosts];
+      selectingPost[index] = post;
+      setAllPosts(selectingPost);
+      return;
+    } else {
+      index = followPosts.findIndex(p => post.id === p.id);
+      selectingPost = [...followPosts];
+      selectingPost[index] = post;
+      setFollowPosts(selectingPost);
+      return;
+    }
+  };
+
   useEffect(() => {
     fetchPosts();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -43,6 +60,7 @@ const Home = () => {
         handleSelectedPost={handleSelectedPost}
       />
       <Posts
+        updatePost={updatePost}
         posts={selectedPost === 'all' ? allPosts : followPosts}
         loading={loading}
         showMessage="home"

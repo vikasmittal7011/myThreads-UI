@@ -1,12 +1,12 @@
 import { useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
+import { Text } from '@chakra-ui/react';
 
-import usefetchApiCall from '../hooks/useFetchApiCall';
-import NavBar from '../components/common/NavBar';
 import Header from '../components/user/Header';
 import Posts from '../components/common/Posts';
 import Loader from '../components/common/Loader';
-import { Text } from '@chakra-ui/react';
+import NavBar from '../components/common/NavBar';
+import usefetchApiCall from '../hooks/useFetchApiCall';
 
 const UserProfile = () => {
   const { apiCall } = usefetchApiCall();
@@ -57,6 +57,14 @@ const UserProfile = () => {
     setLoading(false);
   };
 
+  const updatePost = post => {
+    let index, selectingPost;
+    index = posts.findIndex(p => post.id === p.id);
+    selectingPost = [...posts];
+    selectingPost[index] = post;
+    setPosts(selectingPost);
+  };
+
   return (
     <>
       <NavBar />
@@ -71,7 +79,11 @@ const UserProfile = () => {
                 loading={loading}
                 handleFollowAndUnfollow={handleFollowAndUnfollow}
               />
-              <Posts posts={posts} loading={postLoading} />
+              <Posts
+                posts={posts}
+                loading={postLoading}
+                updatePost={updatePost}
+              />
             </>
           ) : (
             <Text>User Not Found</Text>

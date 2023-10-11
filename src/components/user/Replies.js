@@ -1,12 +1,12 @@
-import { Avatar, Divider, Flex, Text } from '@chakra-ui/react';
+import { Avatar, Box, Divider, Flex, Text } from '@chakra-ui/react';
 import { BsThreeDots } from 'react-icons/bs';
-import Actions from './Actions';
+// import Actions from './Actions';
 
 const Replies = ({ replies }) => {
   return (
     <>
       {replies?.map((r, i) => (
-        <>
+        <Box key={i}>
           <Flex gap={4} my="3" py="2" width="full">
             <Avatar src={r?.userId?.image} name={r?.userId?.name} size="sm" />
             <Flex flexDirection="column" gap="1" width="full">
@@ -28,14 +28,14 @@ const Replies = ({ replies }) => {
               <Text textAlign="start" fontSize="md">
                 {r?.text}
               </Text>
-              <Actions />
+              {/* <Actions />
               <Text color="gray.light" fontSize="sm" textAlign="start">
                 Likes
-              </Text>
+              </Text> */}
             </Flex>
           </Flex>
           <Divider mb="3" />
-        </>
+        </Box>
       ))}
     </>
   );

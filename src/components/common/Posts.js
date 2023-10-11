@@ -7,20 +7,14 @@ import {
   Link as ChakraLink,
 } from '@chakra-ui/react';
 import { Link, useNavigate } from 'react-router-dom';
-import { formatDistanceToNow } from 'date-fns';
-import { useState } from 'react';
 
-import Actions from '../user/Actions';
 import Loader from './Loader';
+import ShowTime from './ShowTime';
+import Actions from '../user/Actions';
 import verified from '../../assets/verified.png';
 
-const Posts = ({ posts, loading, showMessage = 'user' }) => {
+const Posts = ({ posts, loading, showMessage = 'user', updatePost }) => {
   const navigate = useNavigate();
-  const [liked, setLiked] = useState(false);
-
-  const handleLike = () => {
-    setLiked(!liked);
-  };
 
   if (loading) {
     return <Loader />;
@@ -62,18 +56,7 @@ const Posts = ({ posts, loading, showMessage = 'user' }) => {
                       <Image src={verified} h={4} w={4} ml={1} />
                     </Flex>
                     <Flex alignItems="center" gap={4}>
-                      <Text
-                        fontSize="sm"
-                        color="gray.light"
-                        width="36"
-                        textAlign="right"
-                      >
-                        {formatDistanceToNow(new Date(p.createdAt)).replace(
-                          /^about\s+/i,
-                          ''
-                        )}{' '}
-                        ago
-                      </Text>
+                      <ShowTime time={p.createdAt} />
                     </Flex>
                   </Flex>
                   <Text textAlign="start" fontSize="sm">
@@ -95,24 +78,7 @@ const Posts = ({ posts, loading, showMessage = 'user' }) => {
                     )}
                   </Box>
                   <Flex gap={3} my={1}>
-                    <Actions
-                      liked={p?.likes?.length}
-                      handleLikeAndUnlike={handleLike}
-                    />
-                  </Flex>
-                  <Flex alignItems="center" gap="2">
-                    <Text color="gray.light" fontSize="sm">
-                      {p?.replies?.length} replies
-                    </Text>
-                    <Box
-                      width={0.5}
-                      height={0.5}
-                      bg={'gray.light'}
-                      borderRadius={'full'}
-                    />
-                    <Text color="gray.light" fontSize="sm">
-                      {p?.likes?.length} likes
-                    </Text>
+                    <Actions post={p} updatePost={updatePost} />
                   </Flex>
                 </Flex>
               </Flex>
