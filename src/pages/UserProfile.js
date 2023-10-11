@@ -65,6 +65,11 @@ const UserProfile = () => {
     setPosts(selectingPost);
   };
 
+  const deletePost = id => {
+    const afterDeletePost = posts.filter(p => p.id !== id);
+    setPosts(afterDeletePost);
+  };
+
   return (
     <>
       <NavBar />
@@ -83,6 +88,7 @@ const UserProfile = () => {
                 posts={posts}
                 loading={postLoading}
                 updatePost={updatePost}
+                deletePost={deletePost}
               />
             </>
           ) : (

@@ -57,11 +57,11 @@ const CreatePost = () => {
     });
     if (response.success) {
       showToast('Success', 'Post created successfully');
-      setImgUrl('');
-      setPostText('');
       onClose();
       navigate(`/${response.username}/post/${response.post.id}`);
     }
+    setImgUrl('');
+    setPostText('');
   };
 
   return (
@@ -89,6 +89,10 @@ const CreatePost = () => {
             color={'white'}
             _hover={{
               bg: useColorModeValue('gray.700', 'gray.800'),
+            }}
+            onClick={() => {
+              setImgUrl('');
+              setPostText('');
             }}
           />
           <ModalBody>

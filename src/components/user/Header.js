@@ -58,7 +58,7 @@ const Header = ({ user, handleFollowAndUnfollow, loading }) => {
         </Box>
       </Flex>
       <Text fontSize="xl">{user?.bio}</Text>
-      {user?.id === userInfo.id ? (
+      {user?.id === userInfo?.id ? (
         <Button
           bg={color}
           color={'white'}
@@ -78,7 +78,7 @@ const Header = ({ user, handleFollowAndUnfollow, loading }) => {
           }}
           bg={color}
         >
-          {user?.followers?.includes(userInfo.id) ? 'UnFollow' : 'Follow'}
+          {user?.followers?.includes(userInfo?.id) ? 'UnFollow' : 'Follow'}
         </Button>
       )}
       <Flex width={'full'} justifyContent={'space-between'}>

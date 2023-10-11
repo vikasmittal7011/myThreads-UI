@@ -4,7 +4,13 @@ import {
   Flex,
   Image,
   Text,
-  Link as ChakraLink,
+  Modal,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  ModalOverlay,
+  Button,
+  useDisclosure,
 } from '@chakra-ui/react';
 import { Link, useNavigate } from 'react-router-dom';
 
@@ -12,9 +18,38 @@ import Loader from './Loader';
 import ShowTime from './ShowTime';
 import Actions from '../user/Actions';
 import verified from '../../assets/verified.png';
+import { DeleteIcon } from '@chakra-ui/icons';
+import { useRecoilValue } from 'recoil';
+import userAtom from '../../atoms/userAtom';
+import useFetchApiCall from '../../hooks/useFetchApiCall';
+import { useState } from 'react';
+import useToastBox from '../../hooks/useToastBox';
 
-const Posts = ({ posts, loading, showMessage = 'user', updatePost }) => {
+const Posts = ({
+  posts,
+  loading,
+  showMessage = 'user',
+  updatePost,
+  deletePost,
+}) => {
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const { apiCall } = useFetchApiCall();
+  const { showToast } = useToastBox();
+  const user = useRecoilValue(userAtom);
   const navigate = useNavigate();
+  const [isDeleting, setIsDeleting] = useState(false);
+
+  const deleteingPost = async id => {
+    if (isDeleting) return;
+    onClose();
+    setIsDeleting(true);
+    const response = await apiCall(`post/${id}`, 'DELETE');
+    if (response.success) {
+      showToast('Success', 'Post delete successfully');
+      deletePost(id);
+    }
+    setIsDeleting(false);
+  };
 
   if (loading) {
     return <Loader />;
@@ -25,7 +60,7 @@ const Posts = ({ posts, loading, showMessage = 'user', updatePost }) => {
       {posts?.length > 0 ? (
         <>
           {posts?.map((p, i) => (
-            <Link to={`/${p?.postedBy?.username}/post/${p.id}`} key={i}>
+            <Link to={`/${p?.postedBy?.username}/post/${p?.id}`} key={i}>
               <Flex gap={3} mb={4} py={5}>
                 <Flex flexDirection={'column'} alignItems={'center'}>
                   <Avatar
@@ -57,6 +92,16 @@ const Posts = ({ posts, loading, showMessage = 'user', updatePost }) => {
                     </Flex>
                     <Flex alignItems="center" gap={4}>
                       <ShowTime time={p.createdAt} />
+                      {p?.postedBy?.id === user?.id &&
+                        showMessage === 'user' && (
+                          <DeleteIcon
+                            size={12}
+                            onClick={e => {
+                              e.preventDefault();
+                              onOpen();
+                            }}
+                          />
+                        )}
                     </Flex>
                   </Flex>
                   <Text textAlign="start" fontSize="sm">
@@ -82,18 +127,33 @@ const Posts = ({ posts, loading, showMessage = 'user', updatePost }) => {
                   </Flex>
                 </Flex>
               </Flex>
+              <Modal isOpen={isOpen} onClose={onClose}>
+                <ModalOverlay />
+                <ModalContent>
+                  <ModalHeader>Are Want To Delete This Post</ModalHeader>
+
+                  <ModalFooter>
+                    <Button colorScheme="blue" mr={3} onClick={onClose}>
+                      No
+                    </Button>
+                    <Button
+                      variant="ghost"
+                      onClick={() => {
+                        deleteingPost(p.id);
+                      }}
+                    >
+                      Yes
+                    </Button>
+                  </ModalFooter>
+                </ModalContent>
+              </Modal>
             </Link>
           ))}
         </>
       ) : (
         <Text my={5} as="h1">
           {showMessage === 'user' ? (
-            <>
-              No Post Found,
-              <ChakraLink as={Link} to="/" mx="2">
-                wonna post one
-              </ChakraLink>
-            </>
+            <>User Not Have Post</>
           ) : (
             <>Post Not Found</>
           )}

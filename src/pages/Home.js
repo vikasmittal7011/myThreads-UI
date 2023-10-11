@@ -47,6 +47,18 @@ const Home = () => {
     }
   };
 
+  const deletePost = id => {
+    if (selectedPost === 'all') {
+      const afterDeletePost = allPosts.filter(p => p.id !== id);
+      setAllPosts(afterDeletePost);
+      return;
+    } else {
+      const afterDeletePost = followPosts.filter(p => p.id !== id);
+      setFollowPosts(afterDeletePost);
+      return;
+    }
+  };
+
   useEffect(() => {
     fetchPosts();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -64,6 +76,7 @@ const Home = () => {
         posts={selectedPost === 'all' ? allPosts : followPosts}
         loading={loading}
         showMessage="home"
+        deletePost={deletePost}
       />
     </>
   );

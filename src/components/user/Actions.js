@@ -51,9 +51,9 @@ const Actions = ({ post, updatePost }) => {
       });
       if (response.success) {
         updatePost(response.post);
+        onClose();
       }
       setText('');
-      onClose();
     } else {
       showToast('Warning', 'Enter some text to reply', 'warning');
     }
@@ -96,8 +96,8 @@ export default Actions;
 const LikeSVG = ({ user, post, handleLikeAndUnlike }) => (
   <svg
     aria-label="Like"
-    color={post?.likes?.includes(user.id) ? 'rgb(237, 73, 86)' : ''}
-    fill={post?.likes?.includes(user.id) ? 'rgb(237, 73, 86)' : 'transparent'}
+    color={post?.likes?.includes(user?.id) ? 'rgb(237, 73, 86)' : ''}
+    fill={post?.likes?.includes(user?.id) ? 'rgb(237, 73, 86)' : 'transparent'}
     height="19"
     role="img"
     viewBox="0 0 24 22"
