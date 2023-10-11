@@ -1,16 +1,37 @@
-import { Box, Flex, Text } from '@chakra-ui/react';
+import {
+  Box,
+  Button,
+  Flex,
+  Modal,
+  ModalBody,
+  ModalCloseButton,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  ModalOverlay,
+  Text,
+  useDisclosure,
+} from '@chakra-ui/react';
 import { useRecoilValue } from 'recoil';
 import { useState } from 'react';
 
+import InputBox from '../form/InputBox';
 import userAtom from '../../atoms/userAtom';
 import useToastBox from '../../hooks/useToastBox';
 import useFetchApiCall from '../../hooks/useFetchApiCall';
 
 const Actions = ({ post, updatePost }) => {
+  const { isOpen, onOpen, onClose } = useDisclosure();
+
   const user = useRecoilValue(userAtom);
   const { showToast } = useToastBox();
-  const { apiCall } = useFetchApiCall();
+  const { apiCall, loading } = useFetchApiCall();
   const [isLikeing, setIsLikeing] = useState(false);
+  const [text, setText] = useState('');
+
+  const handleText = (name, value) => {
+    setText(value);
+  };
 
   const handleLikeAndUnlike = async () => {
     if (isLikeing) return;
@@ -23,6 +44,21 @@ const Actions = ({ post, updatePost }) => {
     setIsLikeing(false);
   };
 
+  const handleReply = async () => {
+    if (text) {
+      const response = await apiCall(`post/replie/${post.id}`, 'PATCH', {
+        text,
+      });
+      if (response.success) {
+        updatePost(response.post);
+      }
+      setText('');
+      onClose();
+    } else {
+      showToast('Warning', 'Enter some text to reply', 'warning');
+    }
+  };
+
   return (
     <Flex flexDirection="column">
       <Flex gap={3} my={2} onClick={e => e.preventDefault()} cursor="pointer">
@@ -31,7 +67,14 @@ const Actions = ({ post, updatePost }) => {
           post={post}
           handleLikeAndUnlike={handleLikeAndUnlike}
         />
-        <CommentSVG />
+        <CommentSVG
+          isOpen={isOpen}
+          onClose={onClose}
+          onOpen={onOpen}
+          handleText={handleText}
+          handleReply={handleReply}
+          loading={loading}
+        />
         <RepostSVG />
         <ShareSVG />
       </Flex>
@@ -69,26 +112,57 @@ const LikeSVG = ({ user, post, handleLikeAndUnlike }) => (
   </svg>
 );
 
-const CommentSVG = () => (
-  <svg
-    aria-label="Comment"
-    color=""
-    fill=""
-    height="20"
-    role="img"
-    viewBox="0 0 24 24"
-    width="20"
-    // onClick={onOpen}
-  >
-    <title>Comment</title>
-    <path
-      d="M20.656 17.008a9.993 9.993 0 1 0-3.59 3.615L22 22Z"
-      fill="none"
-      stroke="currentColor"
-      strokeLinejoin="round"
-      strokeWidth="2"
-    ></path>
-  </svg>
+const CommentSVG = ({
+  isOpen,
+  onClose,
+  onOpen,
+  handleText,
+  handleReply,
+  loading,
+}) => (
+  <>
+    <svg
+      aria-label="Comment"
+      color=""
+      fill=""
+      height="20"
+      role="img"
+      viewBox="0 0 24 24"
+      width="20"
+      onClick={onOpen}
+    >
+      <title>Comment</title>
+      <path
+        d="M20.656 17.008a9.993 9.993 0 1 0-3.59 3.615L22 22Z"
+        fill="none"
+        stroke="currentColor"
+        strokeLinejoin="round"
+        strokeWidth="2"
+      ></path>
+    </svg>
+    <Modal isOpen={isOpen} onClose={onClose}>
+      <ModalOverlay />
+      <ModalContent>
+        <ModalHeader></ModalHeader>
+        <ModalCloseButton />
+        <ModalBody pb={6}>
+          <InputBox label="Reply Text" onChange={handleText} />
+        </ModalBody>
+
+        <ModalFooter>
+          <Button
+            size="sm"
+            colorScheme="blue"
+            mr={3}
+            isLoading={loading}
+            onClick={handleReply}
+          >
+            Reply
+          </Button>
+        </ModalFooter>
+      </ModalContent>
+    </Modal>
+  </>
 );
 
 const RepostSVG = () => (
