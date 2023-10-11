@@ -10,6 +10,7 @@ import useToastBox from '../../hooks/useToastBox';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import userAtom from '../../atoms/userAtom';
 import { useNavigate, Link as NavLink } from 'react-router-dom';
+import CreatePost from '../../pages/CreatePost';
 
 const NavBar = () => {
   const { toggleColorMode, colorMode } = useColorMode();
@@ -53,6 +54,7 @@ const NavBar = () => {
           <Button size={'sm'} onClick={logout}>
             <FiLogOut size={20} />
           </Button>
+          <CreatePost />
         </>
       )}
     </Flex>

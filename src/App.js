@@ -10,7 +10,6 @@ import {
 import Protected from './components/common/Protected';
 import { Suspense } from 'react';
 import Loader from './components/common/Loader';
-import CreatePost from './pages/CreatePost';
 
 function App() {
   return (
@@ -40,7 +39,6 @@ function App() {
           <Route exact path="/:username/post/:postId" element={<UserPost />} />
         </Routes>
       </Suspense>
-      <CreatePost />
     </Container>
   );
 }

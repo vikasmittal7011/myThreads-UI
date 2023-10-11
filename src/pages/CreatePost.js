@@ -70,7 +70,6 @@ const CreatePost = () => {
         position="fixed"
         bottom="10"
         right="10"
-        leftIcon={<AddIcon />}
         onClick={onOpen}
         bg={useColorModeValue('gray.600', 'gray.700')}
         color={'white'}
@@ -78,7 +77,7 @@ const CreatePost = () => {
           bg: useColorModeValue('gray.700', 'gray.800'),
         }}
       >
-        Posts
+        <AddIcon />
       </Button>
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
