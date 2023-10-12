@@ -11,6 +11,7 @@ import { useRecoilValue, useSetRecoilState } from 'recoil';
 import userAtom from '../../atoms/userAtom';
 import { useNavigate, Link as NavLink } from 'react-router-dom';
 import CreatePost from '../../pages/CreatePost';
+import { BsFillChatQuoteFill } from 'react-icons/bs';
 
 const NavBar = () => {
   const { toggleColorMode, colorMode } = useColorMode();
@@ -50,6 +51,9 @@ const NavBar = () => {
         <>
           <Link as={NavLink} to={`/${user.username}`}>
             <CgProfile size={24} />
+          </Link>
+          <Link as={NavLink} to={`/chat`}>
+            <BsFillChatQuoteFill size={20} />
           </Link>
           <Button size={'sm'} onClick={logout}>
             <FiLogOut size={20} />
