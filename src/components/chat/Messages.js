@@ -5,7 +5,6 @@ import { selectedConversactionAtom } from '../../atoms/conversationAtom';
 
 const Messages = ({ ownMessage, message }) => {
   const selectedConversation = useRecoilValue(selectedConversactionAtom);
-  console.log(message);
   return (
     <>
       {ownMessage ? (

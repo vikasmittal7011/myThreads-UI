@@ -7,7 +7,6 @@ import { selectedConversactionAtom } from '../../atoms/conversationAtom';
 
 const ChatMessages = () => {
   const selectedConversation = useRecoilValue(selectedConversactionAtom);
-  console.log(selectedConversation);
   return (
     <>
       {!selectedConversation.username && <NotSelectedChatMessage />}

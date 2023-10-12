@@ -19,7 +19,6 @@ import { selectedConversactionAtom } from '../../atoms/conversationAtom';
 const ConversationsData = ({ conversation }) => {
   const { lastMessage } = conversation;
   const participants = conversation.participants[0];
-  console.log(participants);
   const color = useColorModeValue('gray.600', 'gray.dark');
   const user = useRecoilValue(userAtom);
   const [selectedConversation, setSelectedConversationState] = useRecoilState(

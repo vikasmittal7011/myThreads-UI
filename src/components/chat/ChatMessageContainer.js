@@ -7,14 +7,14 @@ import {
   useColorModeValue,
 } from '@chakra-ui/react';
 import { useEffect } from 'react';
-import { useRecoilState, useRecoilValue } from 'recoil';
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 
 import verified from '../../assets/verified.png';
 
 import Messages from './Messages';
 import ChatMessageInput from './ChatMessageInput';
 import ChatMessageSkeleton from './ChatMessageSkeleton';
-import {
+import conversationsAtom, {
   messagesAtom,
   selectedConversactionAtom,
 } from '../../atoms/conversationAtom';
@@ -22,8 +22,9 @@ import userAtom from '../../atoms/userAtom';
 import useFetchApiCall from '../../hooks/useFetchApiCall';
 
 const ChatMessageContainer = () => {
-  const selectedConversation = useRecoilValue(selectedConversactionAtom);
   const user = useRecoilValue(userAtom);
+  const selectedConversation = useRecoilValue(selectedConversactionAtom);
+  const setConversations = useSetRecoilState(conversationsAtom);
   const [messages, setMessages] = useRecoilState(messagesAtom);
   const { apiCall } = useFetchApiCall();
 
@@ -33,6 +34,32 @@ const ChatMessageContainer = () => {
     if (response.success) {
       setMessages({ messages: response.messages, loading: false });
     }
+  };
+
+  const handleSendMessage = async message => {
+    const response = await apiCall('message', 'POST', {
+      recipientId: selectedConversation?.userId,
+      message,
+    });
+
+    if (response.success) {
+      setMessages({
+        ...messages,
+        messages: [...messages.messages, response.message],
+      });
+    }
+    setConversations(preConv => {
+      const update = preConv.conversations.map(a => {
+        if (a.id === selectedConversation.id) {
+          return {
+            ...a,
+            lastMessage: { text: message, sender: response.message.sender },
+          };
+        }
+        return a;
+      });
+      return { conversations: update, loading: false };
+    });
   };
 
   useEffect(() => {
@@ -75,7 +102,7 @@ const ChatMessageContainer = () => {
             <Messages key={i} message={m} ownMessage={m?.sender === user?.id} />
           ))}
       </Flex>
-      <ChatMessageInput />
+      <ChatMessageInput handleSendMessage={handleSendMessage} />
     </Flex>
   );
 };
