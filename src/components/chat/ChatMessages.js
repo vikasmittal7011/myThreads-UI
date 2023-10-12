@@ -1,13 +1,18 @@
+import { useRecoilValue } from 'recoil';
 import { Flex, Text } from '@chakra-ui/react';
 import { GiConversation } from 'react-icons/gi';
 import ChatMessageContainer from './ChatMessageContainer';
 
+import { selectedConversactionAtom } from '../../atoms/conversationAtom';
+
 const ChatMessages = () => {
+  const selectedConversation = useRecoilValue(selectedConversactionAtom);
+  console.log(selectedConversation);
   return (
     <>
-      {/* <NotSelectedChatMessage /> */}
+      {!selectedConversation.username && <NotSelectedChatMessage />}
 
-      <ChatMessageContainer />
+      {selectedConversation.username && <ChatMessageContainer />}
     </>
   );
 };

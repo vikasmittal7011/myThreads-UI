@@ -1,9 +1,34 @@
 import { Box, Flex } from '@chakra-ui/react';
+import { useEffect } from 'react';
+import { useSetRecoilState } from 'recoil';
+
 import NavBar from '../components/common/NavBar';
 import Conversations from '../components/chat/Conversations';
 import ChatMessages from '../components/chat/ChatMessages';
+import conversationsAtom from '../atoms/conversationAtom';
+import useFetchApiCall from '../hooks/useFetchApiCall';
 
 const Chat = () => {
+  const { apiCall } = useFetchApiCall();
+
+  const setConversations = useSetRecoilState(conversationsAtom);
+
+  const getConversations = async () => {
+    setConversations({ loading: true });
+    const response = await apiCall('message/conversation');
+    if (response.success) {
+      setConversations({
+        loading: false,
+        conversations: response.conversations,
+      });
+    }
+  };
+
+  useEffect(() => {
+    getConversations();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   return (
     <>
       <NavBar />
@@ -16,7 +41,7 @@ const Chat = () => {
           md: '80%',
           lg: '750px',
         }}
-        p={4}
+        px={4}
       >
         <Flex
           gap="4"

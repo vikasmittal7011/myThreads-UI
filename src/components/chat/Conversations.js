@@ -1,10 +1,14 @@
 import { Button, Flex, Text, useColorModeValue } from '@chakra-ui/react';
-import InputBox from '../form/InputBox';
 import { SearchIcon } from '@chakra-ui/icons';
-import ConversationsSkeleton from './ConversationsSkeleton';
+import { useRecoilValue } from 'recoil';
+
+import InputBox from '../form/InputBox';
 import ConversationsData from './ConversationsData';
+import ConversationsSkeleton from './ConversationsSkeleton';
+import conversationsAtom from '../../atoms/conversationAtom';
 
 const Conversations = () => {
+  const conversations = useRecoilValue(conversationsAtom);
   return (
     <Flex
       flex={30}
@@ -25,8 +29,11 @@ const Conversations = () => {
           <SearchIcon />
         </Button>
       </Flex>
-      {false && <ConversationsSkeleton />}
-      {<ConversationsData />}
+      {conversations.loading && <ConversationsSkeleton />}
+      {!conversations.loading &&
+        conversations.conversations.map((c, i) => (
+          <ConversationsData key={i} conversation={c} />
+        ))}
     </Flex>
   );
 };

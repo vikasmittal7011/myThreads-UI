@@ -8,10 +8,33 @@ import {
   WrapItem,
   useColorModeValue,
 } from '@chakra-ui/react';
+import { BiCheckDouble } from 'react-icons/bi';
+import { useRecoilState, useRecoilValue } from 'recoil';
 
 import verified from '../../assets/verified.png';
 
-const ConversationsData = () => {
+import userAtom from '../../atoms/userAtom';
+import { selectedConversactionAtom } from '../../atoms/conversationAtom';
+
+const ConversationsData = ({ conversation }) => {
+  const { lastMessage } = conversation;
+  const participants = conversation.participants[0];
+  console.log(participants);
+  const color = useColorModeValue('gray.600', 'gray.dark');
+  const user = useRecoilValue(userAtom);
+  const [selectedConversation, setSelectedConversationState] = useRecoilState(
+    selectedConversactionAtom
+  );
+
+  const handleclick = () => {
+    setSelectedConversationState({
+      id: conversation.id,
+      userId: participants?.id,
+      username: participants?.username,
+      image: participants?.image,
+    });
+  };
+
   return (
     <Flex
       gap="4"
@@ -23,22 +46,27 @@ const ConversationsData = () => {
         color: 'white',
         bg: useColorModeValue('gray.600', 'gray.dark'),
       }}
+      onClick={handleclick}
+      bg={selectedConversation.id === conversation.id && color}
     >
       <WrapItem>
         <Avatar
           size={{ base: 'xs', sm: 'sm', md: 'md' }}
-          src="https://bit.ly/dan-abramov"
-          name={`username`}
+          src={participants?.image}
+          name={participants?.name}
         >
           <AvatarBadge bg="green.500" boxSize="1em" />
         </Avatar>
       </WrapItem>
       <Stack direction="column" fontSize="sm">
         <Text fontWeight="700" display="flex" alignItems="center">
-          userName <Image src={verified} w="4" h="4" ml="1" />
+          {participants?.username} <Image src={verified} w="4" h="4" ml="1" />
         </Text>
         <Text fontSize="xs" display="flex" alignContent="center" gap="1">
-          Last message show here
+          {lastMessage?.sender === user?.id && <BiCheckDouble size={20} />}
+          {lastMessage?.text.length > 18
+            ? lastMessage?.text.subString(0, 18) + '...'
+            : lastMessage?.text}
         </Text>
       </Stack>
     </Flex>
