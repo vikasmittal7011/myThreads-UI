@@ -15,8 +15,11 @@ import verified from '../../assets/verified.png';
 
 import userAtom from '../../atoms/userAtom';
 import { selectedConversactionAtom } from '../../atoms/conversationAtom';
+import useSocketContext from '../../hooks/useSocketContext';
 
 const ConversationsData = ({ conversation }) => {
+  const { onlineUsers } = useSocketContext();
+
   const { lastMessage } = conversation;
   const participants = conversation.participants[0];
   const color = useColorModeValue('gray.600', 'gray.dark');
@@ -55,7 +58,9 @@ const ConversationsData = ({ conversation }) => {
           src={participants?.image}
           name={participants?.name}
         >
-          <AvatarBadge bg="green.500" boxSize="1em" />
+          {onlineUsers.includes(participants?.id) && (
+            <AvatarBadge bg="green.500" boxSize="1em" />
+          )}
         </Avatar>
       </WrapItem>
       <Stack direction="column" fontSize="sm">

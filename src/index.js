@@ -5,6 +5,7 @@ import App from './App';
 import { BrowserRouter } from 'react-router-dom';
 import './index.css';
 import { RecoilRoot } from 'recoil';
+import SocketContextProvider from './context/SocketContext';
 
 const container = document.getElementById('root');
 const root = ReactDOM.createRoot(container);
@@ -37,7 +38,9 @@ root.render(
     <RecoilRoot>
       <BrowserRouter>
         <ColorModeScript />
-        <App />
+        <SocketContextProvider>
+          <App />
+        </SocketContextProvider>
       </BrowserRouter>
     </RecoilRoot>
   </ChakraProvider>
