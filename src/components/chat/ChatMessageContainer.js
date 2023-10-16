@@ -29,6 +29,10 @@ const ChatMessageContainer = () => {
   const { apiCall } = useFetchApiCall();
 
   const loadMessages = async () => {
+    if (selectedConversation.dummy) {
+      setMessages([]);
+      return;
+    }
     setMessages({ ...messages, loading: true });
     const response = await apiCall(`message/${selectedConversation.userId}`);
     if (response.success) {
@@ -43,9 +47,15 @@ const ChatMessageContainer = () => {
     });
 
     if (response.success) {
+      let newMessage;
+      if (messages?.messages?.length > 0) {
+        newMessage = [...messages?.messages, response.message];
+      } else {
+        newMessage = [response.message];
+      }
       setMessages({
         ...messages,
-        messages: [...messages.messages, response.message],
+        messages: newMessage,
       });
     }
     setConversations(preConv => {
@@ -98,7 +108,7 @@ const ChatMessageContainer = () => {
       >
         {messages.loading && <ChatMessageSkeleton />}
         {!messages.loading &&
-          messages.messages.map((m, i) => (
+          messages?.messages?.map((m, i) => (
             <Messages key={i} message={m} ownMessage={m?.sender === user?.id} />
           ))}
       </Flex>

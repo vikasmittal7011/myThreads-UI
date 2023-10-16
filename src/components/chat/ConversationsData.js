@@ -31,6 +31,7 @@ const ConversationsData = ({ conversation }) => {
       userId: participants?.id,
       username: participants?.username,
       image: participants?.image,
+      dummy: conversation?.dummy,
     });
   };
 
