@@ -6,7 +6,7 @@ import {
   Text,
   useColorModeValue,
 } from '@chakra-ui/react';
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 
 import verified from '../../assets/verified.png';
@@ -20,13 +20,18 @@ import conversationsAtom, {
 } from '../../atoms/conversationAtom';
 import userAtom from '../../atoms/userAtom';
 import useFetchApiCall from '../../hooks/useFetchApiCall';
+import useSocketContext from '../../hooks/useSocketContext';
 
 const ChatMessageContainer = () => {
+  const { socket } = useSocketContext();
+  const { apiCall } = useFetchApiCall();
+
   const user = useRecoilValue(userAtom);
   const selectedConversation = useRecoilValue(selectedConversactionAtom);
   const setConversations = useSetRecoilState(conversationsAtom);
   const [messages, setMessages] = useRecoilState(messagesAtom);
-  const { apiCall } = useFetchApiCall();
+
+  const messageRef = useRef(null);
 
   const loadMessages = async () => {
     if (selectedConversation.dummy) {
@@ -38,6 +43,21 @@ const ChatMessageContainer = () => {
     if (response.success) {
       setMessages({ messages: response.messages, loading: false });
     }
+  };
+
+  const updateConversation = (message, id) => {
+    setConversations(preConv => {
+      const update = preConv.conversations.map(a => {
+        if (a.id === id) {
+          return {
+            ...a,
+            lastMessage: { text: message, sender: id },
+          };
+        }
+        return a;
+      });
+      return { conversations: update, loading: false };
+    });
   };
 
   const handleSendMessage = async message => {
@@ -58,24 +78,31 @@ const ChatMessageContainer = () => {
         messages: newMessage,
       });
     }
-    setConversations(preConv => {
-      const update = preConv.conversations.map(a => {
-        if (a.id === selectedConversation.id) {
-          return {
-            ...a,
-            lastMessage: { text: message, sender: response.message.sender },
-          };
-        }
-        return a;
-      });
-      return { conversations: update, loading: false };
-    });
+
+    updateConversation(message, response.message.conversationId);
   };
 
   useEffect(() => {
     loadMessages();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedConversation]);
+
+  useEffect(() => {
+    socket.on('newMessage', message => {
+      if (selectedConversation.id === message.conversationId) {
+        let oldData = { ...messages };
+        oldData.messages = [...oldData.messages, message];
+        setMessages(oldData);
+      }
+      updateConversation(message.text, message.conversationId);
+    });
+    return () => socket.off('newMessage');
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [socket, messages, setMessages]);
+
+  useEffect(() => {
+    messageRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }, [messages]);
 
   return (
     <Flex
@@ -109,7 +136,18 @@ const ChatMessageContainer = () => {
         {messages.loading && <ChatMessageSkeleton />}
         {!messages.loading &&
           messages?.messages?.map((m, i) => (
-            <Messages key={i} message={m} ownMessage={m?.sender === user?.id} />
+            <Flex
+              key={i}
+              direction="column"
+              ref={
+                messages?.messages?.length - 1 ===
+                messages?.messages?.indexOf(m)
+                  ? messageRef
+                  : null
+              }
+            >
+              <Messages message={m} ownMessage={m?.sender === user?.id} />
+            </Flex>
           ))}
       </Flex>
       <ChatMessageInput handleSendMessage={handleSendMessage} />

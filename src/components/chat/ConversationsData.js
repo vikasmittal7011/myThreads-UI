@@ -58,7 +58,7 @@ const ConversationsData = ({ conversation }) => {
           src={participants?.image}
           name={participants?.name}
         >
-          {onlineUsers.includes(participants?.id) && (
+          {onlineUsers?.includes(participants?.id) && (
             <AvatarBadge bg="green.500" boxSize="1em" />
           )}
         </Avatar>
