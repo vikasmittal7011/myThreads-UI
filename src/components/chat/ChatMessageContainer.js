@@ -79,7 +79,7 @@ const ChatMessageContainer = () => {
       });
     }
 
-    updateConversation(message, response.message.conversationId);
+    updateConversation(message, response.message.sender);
   };
 
   useEffect(() => {
@@ -103,6 +103,33 @@ const ChatMessageContainer = () => {
   useEffect(() => {
     messageRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
+
+  useEffect(() => {
+    const lastMessageFormOtherUser =
+      messages?.messages?.length &&
+      messages?.messages[messages?.messages?.length - 1].sender !== user?.id;
+    if (lastMessageFormOtherUser) {
+      socket.emit('markMessageAsSeen', {
+        conversationId: selectedConversation?.id,
+        userId: selectedConversation?.userId,
+      });
+    }
+
+    socket.on('messageSeen', ({ conversationId }) => {
+      if (conversationId === selectedConversation?.id) {
+        const update = messages?.messages?.map(message => {
+          if (!message.seen) {
+            return {
+              ...message,
+              seen: true,
+            };
+          }
+          return message;
+        });
+        setMessages({ messages: update, loading: false });
+      }
+    });
+  }, [messages, user, socket, selectedConversation, setMessages]);
 
   return (
     <Flex

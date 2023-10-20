@@ -1,6 +1,7 @@
 import {
   Avatar,
   AvatarBadge,
+  Box,
   Flex,
   Image,
   Stack,
@@ -68,7 +69,16 @@ const ConversationsData = ({ conversation }) => {
           {participants?.username} <Image src={verified} w="4" h="4" ml="1" />
         </Text>
         <Text fontSize="xs" display="flex" alignContent="center" gap="1">
-          {lastMessage?.sender === user?.id && <BiCheckDouble size={20} />}
+          {lastMessage?.sender === user?.id && (
+            <Box
+              alignSelf="flex-end"
+              ml="1"
+              color={lastMessage.seen && 'blue.400'}
+              fontWeight="bold"
+            >
+              <BiCheckDouble size={20} />
+            </Box>
+          )}
           {lastMessage?.text.length > 18
             ? lastMessage?.text.subString(0, 18) + '...'
             : lastMessage?.text}

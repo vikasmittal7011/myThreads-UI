@@ -1,5 +1,6 @@
-import { Avatar, Flex, Text } from '@chakra-ui/react';
+import { Avatar, Box, Flex, Text } from '@chakra-ui/react';
 import { useRecoilValue } from 'recoil';
+import { BiCheckDouble } from 'react-icons/bi';
 
 import { selectedConversactionAtom } from '../../atoms/conversationAtom';
 
@@ -9,9 +10,17 @@ const Messages = ({ ownMessage, message }) => {
     <>
       {ownMessage ? (
         <Flex gap="2" alignSelf="self-end">
-          <Text maxW="350px" bg={'blue.400'} p="1" borderRadius="md">
-            {message?.text}
-          </Text>
+          <Flex maxW="350px" bg={'green.800'} p="1" borderRadius="md">
+            <Text color="white">{message?.text}</Text>
+            <Box
+              alignSelf="flex-end"
+              ml="1"
+              color={message.seen && 'blue.400'}
+              fontWeight="bold"
+            >
+              <BiCheckDouble size={16} />
+            </Box>
+          </Flex>
           <Avatar src="" w="7" h="7" />
         </Flex>
       ) : (

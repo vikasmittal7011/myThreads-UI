@@ -7,8 +7,10 @@ import Conversations from '../components/chat/Conversations';
 import ChatMessages from '../components/chat/ChatMessages';
 import conversationsAtom from '../atoms/conversationAtom';
 import useFetchApiCall from '../hooks/useFetchApiCall';
+import useSocketContext from '../hooks/useSocketContext';
 
 const Chat = () => {
+  const { socket } = useSocketContext();
   const { apiCall } = useFetchApiCall();
 
   const setConversations = useSetRecoilState(conversationsAtom);
@@ -23,6 +25,23 @@ const Chat = () => {
       });
     }
   };
+
+  useEffect(() => {
+    socket?.on('messageSeen', ({ conversationId }) => {
+      setConversations(preConv => {
+        const update = preConv.conversations.map(a => {
+          if (a.id === conversationId) {
+            return {
+              ...a,
+              lastMessage: { ...a.lastMessage, seen: true },
+            };
+          }
+          return a;
+        });
+        return { conversations: update, loading: false };
+      });
+    });
+  }, [socket, setConversations]);
 
   useEffect(() => {
     getConversations();
