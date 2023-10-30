@@ -68,21 +68,18 @@ const ConversationsData = ({ conversation }) => {
         <Text fontWeight="700" display="flex" alignItems="center">
           {participants?.username} <Image src={verified} w="4" h="4" ml="1" />
         </Text>
-        <Text fontSize="xs" display="flex" alignContent="center" gap="1">
+        <Flex fontSize="xs" alignContent="center" gap="1" alignItems="center">
           {lastMessage?.sender === user?.id && (
-            <Box
-              alignSelf="flex-end"
-              ml="1"
-              color={lastMessage.seen && 'blue.400'}
-              fontWeight="bold"
-            >
-              <BiCheckDouble size={20} />
+            <Box color={lastMessage?.seen && 'blue.400'}>
+              <BiCheckDouble size={16} />
             </Box>
           )}
-          {lastMessage?.text.length > 18
+          {lastMessage?.img
+            ? 'Image'
+            : lastMessage?.text.length > 18
             ? lastMessage?.text.subString(0, 18) + '...'
             : lastMessage?.text}
-        </Text>
+        </Flex>
       </Stack>
     </Flex>
   );

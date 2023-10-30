@@ -24,7 +24,7 @@ import useSocketContext from '../../hooks/useSocketContext';
 
 const ChatMessageContainer = () => {
   const { socket } = useSocketContext();
-  const { apiCall } = useFetchApiCall();
+  const { apiCall, loading } = useFetchApiCall();
 
   const user = useRecoilValue(userAtom);
   const selectedConversation = useRecoilValue(selectedConversactionAtom);
@@ -60,10 +60,11 @@ const ChatMessageContainer = () => {
     });
   };
 
-  const handleSendMessage = async message => {
+  const handleSendMessage = async (message, imgUrl) => {
     const response = await apiCall('message', 'POST', {
       recipientId: selectedConversation?.userId,
       message,
+      imgUrl,
     });
 
     if (response.success) {
@@ -79,7 +80,7 @@ const ChatMessageContainer = () => {
       });
     }
 
-    updateConversation(message, response.message.sender);
+    updateConversation(message || 'Image', response.message.conversationId);
   };
 
   useEffect(() => {
@@ -94,14 +95,14 @@ const ChatMessageContainer = () => {
         oldData.messages = [...oldData.messages, message];
         setMessages(oldData);
       }
-      updateConversation(message.text, message.conversationId);
+      updateConversation(message.text || 'Image', message.conversationId);
     });
     return () => socket.off('newMessage');
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [socket, messages, setMessages]);
 
   useEffect(() => {
-    messageRef.current?.scrollIntoView({ behavior: 'smooth' });
+    messageRef.current?.scrollIntoView({ behavior: 'smooth', block: 'end' });
   }, [messages]);
 
   useEffect(() => {
@@ -177,7 +178,10 @@ const ChatMessageContainer = () => {
             </Flex>
           ))}
       </Flex>
-      <ChatMessageInput handleSendMessage={handleSendMessage} />
+      <ChatMessageInput
+        handleSendMessage={handleSendMessage}
+        loading={loading}
+      />
     </Flex>
   );
 };
