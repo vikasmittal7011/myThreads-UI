@@ -88,7 +88,9 @@ const Posts = ({
                       >
                         {p?.postedBy?.username}
                       </Text>
-                      <Image src={verified} h={4} w={4} ml={1} />
+                      {p?.postedBy?.verified && (
+                        <Image src={verified} h={4} w={4} ml={1} />
+                      )}
                     </Flex>
                     <Flex alignItems="center" gap={4}>
                       <ShowTime time={p.createdAt} />

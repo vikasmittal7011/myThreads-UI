@@ -152,7 +152,9 @@ const ChatMessageContainer = () => {
         />
         <Text fontWeight="700" display="flex" alignItems="center">
           {selectedConversation?.username}{' '}
-          <Image src={verified} w="4" h="4" ml="1" />
+          {selectedConversation?.verified && (
+            <Image src={verified} w="4" h="4" ml="1" />
+          )}
         </Text>
       </Flex>
 

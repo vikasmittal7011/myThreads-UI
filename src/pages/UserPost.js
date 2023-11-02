@@ -16,9 +16,9 @@ import Loader from '../components/common/Loader';
 import NavBar from '../components/common/NavBar';
 import Actions from '../components/user/Actions';
 import Replies from '../components/user/Replies';
+import ShowTime from '../components/common/ShowTime';
 import useToastBox from '../hooks/useToastBox';
 import useFetchApiCall from '../hooks/useFetchApiCall';
-import ShowTime from '../components/common/ShowTime';
 
 const UserPost = () => {
   const postId = useParams().postId;
@@ -70,7 +70,9 @@ const UserPost = () => {
                     <Text fontSize="sm" fontWeight="bold">
                       {post?.postedBy?.name}
                     </Text>
-                    <Image src={verified} w="4" h="4" ml="2" />
+                    {post?.postedBy?.verified && (
+                      <Image src={verified} w="4" h="4" ml="2" />
+                    )}
                   </Flex>
                 </Flex>
                 <Flex alignItems="center" gap={4}>

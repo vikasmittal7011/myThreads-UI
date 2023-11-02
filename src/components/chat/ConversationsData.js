@@ -66,7 +66,10 @@ const ConversationsData = ({ conversation }) => {
       </WrapItem>
       <Stack direction="column" fontSize="sm">
         <Text fontWeight="700" display="flex" alignItems="center">
-          {participants?.username} <Image src={verified} w="4" h="4" ml="1" />
+          {participants?.username}{' '}
+          {participants?.verified && (
+            <Image src={verified} w="4" h="4" ml="1" />
+          )}
         </Text>
         <Flex fontSize="xs" alignContent="center" gap="1" alignItems="center">
           {lastMessage?.sender === user?.id && (
