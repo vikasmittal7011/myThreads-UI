@@ -2,8 +2,10 @@ import { useEffect, useState } from 'react';
 
 import Posts from '../components/common/Posts';
 import NavBar from '../components/common/NavBar';
-import PostType from '../components/Home.js/PostType';
+import PostType from '../components/home/PostType';
 import useFetchApiCall from '../hooks/useFetchApiCall';
+import { Box, Flex } from '@chakra-ui/react';
+import SuggestedUser from '../components/home/SuggestedUser';
 
 const Home = () => {
   const { apiCall } = useFetchApiCall();
@@ -67,17 +69,24 @@ const Home = () => {
   return (
     <>
       <NavBar />
-      <PostType
-        selectedPost={selectedPost}
-        handleSelectedPost={handleSelectedPost}
-      />
-      <Posts
-        updatePost={updatePost}
-        posts={selectedPost === 'all' ? allPosts : followPosts}
-        loading={loading}
-        showMessage="home"
-        deletePost={deletePost}
-      />
+      <Flex gap={10} alignItems="flex-start">
+        <Box flex={70}>
+          <PostType
+            selectedPost={selectedPost}
+            handleSelectedPost={handleSelectedPost}
+          />
+          <Posts
+            updatePost={updatePost}
+            posts={selectedPost === 'all' ? allPosts : followPosts}
+            loading={loading}
+            showMessage="home"
+            deletePost={deletePost}
+          />
+        </Box>
+        <Box flex={30} display={{ base: 'none', md: 'block' }}>
+          <SuggestedUser />
+        </Box>
+      </Flex>
     </>
   );
 };

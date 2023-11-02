@@ -1,5 +1,5 @@
 import { Box, Container } from '@chakra-ui/react';
-import { Route, Routes } from 'react-router-dom';
+import { Route, Routes, useLocation } from 'react-router-dom';
 import {
   Authentication,
   Chat,
@@ -13,9 +13,15 @@ import { Suspense } from 'react';
 import Loader from './components/common/Loader';
 
 function App() {
+  const { pathname } = useLocation();
+
   return (
+    // <Box>Hello</Box>
+
     <Box position="relative" width="full">
-      <Container maxW="620px">
+      <Container
+        maxW={pathname === '/' ? { base: '620px', md: '900px' } : '620px'}
+      >
         <Suspense fallback={<Loader />}>
           <Routes>
             <Route
