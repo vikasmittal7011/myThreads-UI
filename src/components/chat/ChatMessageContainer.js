@@ -10,6 +10,7 @@ import { useEffect, useRef } from 'react';
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 
 import verified from '../../assets/verified.png';
+import noti from '../../assets/noti.wav';
 
 import Messages from './Messages';
 import ChatMessageInput from './ChatMessageInput';
@@ -94,6 +95,10 @@ const ChatMessageContainer = () => {
         let oldData = { ...messages };
         oldData.messages = [...oldData.messages, message];
         setMessages(oldData);
+        if (!document.hasFocus) {
+          const sound = new Audio(noti);
+          sound.play();
+        }
       }
       updateConversation(message.text || 'Image', message.conversationId);
     });
