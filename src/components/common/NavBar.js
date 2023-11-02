@@ -34,7 +34,7 @@ const NavBar = () => {
   };
 
   return (
-    <Flex justifyContent="space-around" mt={6} mb={12}>
+    <Flex justifyContent="space-around" alignItems="center" mt={6} mb={12}>
       {user && (
         <Link as={NavLink} to="/">
           <AiFillHome size={24} />
