@@ -21,6 +21,7 @@ import useToastBox from '../../hooks/useToastBox';
 import useFetchApiCall from '../../hooks/useFetchApiCall';
 
 const Actions = ({ post, updatePost }) => {
+  console.log(post);
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const user = useRecoilValue(userAtom);
@@ -67,6 +68,7 @@ const Actions = ({ post, updatePost }) => {
           post={post}
           handleLikeAndUnlike={handleLikeAndUnlike}
         />
+
         <CommentSVG
           isOpen={isOpen}
           onClose={onClose}
@@ -75,9 +77,12 @@ const Actions = ({ post, updatePost }) => {
           handleReply={handleReply}
           loading={loading}
         />
+
         <RepostSVG />
-        <ShareSVG />
+
+        <ShareSVG showToast={showToast} post={post} />
       </Flex>
+
       <Flex alignItems="center" gap="2">
         <Text color="gray.light" fontSize="sm">
           {post?.replies?.length} replies
@@ -183,7 +188,7 @@ const RepostSVG = () => (
   </svg>
 );
 
-const ShareSVG = () => (
+const ShareSVG = ({ showToast, post }) => (
   <svg
     aria-label="Share"
     color=""
@@ -192,6 +197,13 @@ const ShareSVG = () => (
     role="img"
     viewBox="0 0 24 24"
     width="20"
+    onClick={() => {
+      const currentLocation =
+        window.location.origin + `/${post.postedBy.username}/post/${post.id}`;
+      navigator.clipboard.writeText(currentLocation).then(() => {
+        showToast('URL is copyed', currentLocation);
+      });
+    }}
   >
     <title>Share</title>
     <line
