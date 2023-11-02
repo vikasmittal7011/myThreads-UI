@@ -1,23 +1,22 @@
+import { Suspense } from 'react';
 import { Box, Container } from '@chakra-ui/react';
 import { Route, Routes, useLocation } from 'react-router-dom';
 import {
   Authentication,
   Chat,
   Home,
+  Settings,
   UpdateProfile,
   UserPost,
   UserProfile,
 } from './pages';
 import Protected from './components/common/Protected';
-import { Suspense } from 'react';
 import Loader from './components/common/Loader';
 
 function App() {
   const { pathname } = useLocation();
 
   return (
-    // <Box>Hello</Box>
-
     <Box position="relative" width="full">
       <Container
         maxW={pathname === '/' ? { base: '620px', md: '900px' } : '620px'}
@@ -49,6 +48,15 @@ function App() {
               element={
                 <Protected>
                   <Chat />
+                </Protected>
+              }
+            />
+            <Route
+              exact
+              path="/setting"
+              element={
+                <Protected>
+                  <Settings />
                 </Protected>
               }
             />

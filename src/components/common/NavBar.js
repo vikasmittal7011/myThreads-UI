@@ -1,17 +1,18 @@
 import { Button, Flex, Image, Link, useColorMode } from '@chakra-ui/react';
-import { FiLogOut } from 'react-icons/fi';
+import { useNavigate, Link as NavLink } from 'react-router-dom';
+import { FiLogOut, FiSettings } from 'react-icons/fi';
 import { AiFillHome } from 'react-icons/ai';
 import { CgProfile } from 'react-icons/cg';
+import { BsFillChatQuoteFill } from 'react-icons/bs';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
 
 import dark from '../../assets/dark-logo.svg';
 import light from '../../assets/light-logo.svg';
-import useFetchApiCall from '../../hooks/useFetchApiCall';
-import useToastBox from '../../hooks/useToastBox';
-import { useRecoilValue, useSetRecoilState } from 'recoil';
+
 import userAtom from '../../atoms/userAtom';
-import { useNavigate, Link as NavLink } from 'react-router-dom';
 import CreatePost from '../../pages/CreatePost';
-import { BsFillChatQuoteFill } from 'react-icons/bs';
+import useToastBox from '../../hooks/useToastBox';
+import useFetchApiCall from '../../hooks/useFetchApiCall';
 
 const NavBar = () => {
   const { toggleColorMode, colorMode } = useColorMode();
@@ -54,6 +55,9 @@ const NavBar = () => {
           </Link>
           <Link as={NavLink} to={`/chat`}>
             <BsFillChatQuoteFill size={20} />
+          </Link>
+          <Link as={NavLink} to={`/setting`}>
+            <FiSettings size={20} />
           </Link>
           <Button size={'sm'} onClick={logout}>
             <FiLogOut size={20} />
