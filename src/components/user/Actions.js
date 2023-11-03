@@ -21,7 +21,6 @@ import useToastBox from '../../hooks/useToastBox';
 import useFetchApiCall from '../../hooks/useFetchApiCall';
 
 const Actions = ({ post, updatePost }) => {
-  console.log(post);
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const user = useRecoilValue(userAtom);
@@ -29,6 +28,14 @@ const Actions = ({ post, updatePost }) => {
   const { apiCall, loading } = useFetchApiCall();
   const [isLikeing, setIsLikeing] = useState(false);
   const [text, setText] = useState('');
+
+  const handleRePost = async () => {
+    const response = await apiCall('post/repost', 'POST', post);
+    if (response.success) {
+      showToast('Repost successfully');
+      updatePost(response.post);
+    }
+  };
 
   const handleText = (name, value) => {
     setText(value);
@@ -78,7 +85,7 @@ const Actions = ({ post, updatePost }) => {
           loading={loading}
         />
 
-        <RepostSVG />
+        <RepostSVG handleRePost={handleRePost} />
 
         <ShareSVG showToast={showToast} post={post} />
       </Flex>
@@ -170,7 +177,7 @@ const CommentSVG = ({
   </>
 );
 
-const RepostSVG = () => (
+const RepostSVG = ({ handleRePost }) => (
   <svg
     aria-label="Repost"
     color="currentColor"
@@ -179,6 +186,7 @@ const RepostSVG = () => (
     role="img"
     viewBox="0 0 24 24"
     width="20"
+    onClick={handleRePost}
   >
     <title>Repost</title>
     <path
