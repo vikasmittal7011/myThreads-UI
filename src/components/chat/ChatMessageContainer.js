@@ -1,5 +1,6 @@
 import {
   Avatar,
+  Box,
   Divider,
   Flex,
   Image,
@@ -22,13 +23,16 @@ import conversationsAtom, {
 import userAtom from '../../atoms/userAtom';
 import useFetchApiCall from '../../hooks/useFetchApiCall';
 import useSocketContext from '../../hooks/useSocketContext';
+import { IoIosArrowBack } from 'react-icons/io';
 
 const ChatMessageContainer = () => {
   const { socket } = useSocketContext();
   const { apiCall, loading } = useFetchApiCall();
 
   const user = useRecoilValue(userAtom);
-  const selectedConversation = useRecoilValue(selectedConversactionAtom);
+  const [selectedConversation, setSelectedConversationState] = useRecoilState(
+    selectedConversactionAtom
+  );
   const setConversations = useSetRecoilState(conversationsAtom);
   const [messages, setMessages] = useRecoilState(messagesAtom);
 
@@ -82,6 +86,10 @@ const ChatMessageContainer = () => {
     }
 
     updateConversation(message || 'Image', response.message.conversationId);
+  };
+
+  const unSelectConversation = () => {
+    setSelectedConversationState({});
   };
 
   useEffect(() => {
@@ -145,6 +153,9 @@ const ChatMessageContainer = () => {
       flexDirection="column"
     >
       <Flex pl="4" width="full" h="12" alignItems="center" gap="2">
+        <Box cursor="pointer" onClick={unSelectConversation}>
+          <IoIosArrowBack size="24" />
+        </Box>
         <Avatar
           size="sm"
           src={selectedConversation?.image}
