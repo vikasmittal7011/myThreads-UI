@@ -5,6 +5,7 @@ import Authentication from './Authentication';
 import UpdateProfile from './UpdateProfile';
 import Chat from './Chat';
 import Settings from './Settings';
+import Search from './Search';
 
 export {
   UserProfile,
@@ -14,4 +15,5 @@ export {
   UpdateProfile,
   Chat,
   Settings,
+  Search,
 };

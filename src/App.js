@@ -5,6 +5,7 @@ import {
   Authentication,
   Chat,
   Home,
+  Search,
   Settings,
   UpdateProfile,
   UserPost,
@@ -57,6 +58,15 @@ function App() {
               element={
                 <Protected>
                   <Settings />
+                </Protected>
+              }
+            />
+            <Route
+              exact
+              path="/search"
+              element={
+                <Protected>
+                  <Search />
                 </Protected>
               }
             />

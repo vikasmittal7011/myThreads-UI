@@ -1,7 +1,7 @@
 import { Button, Flex, Image, Link, useColorMode } from '@chakra-ui/react';
 import { useNavigate, Link as NavLink } from 'react-router-dom';
 import { FiLogOut, FiSettings } from 'react-icons/fi';
-import { AiFillHome } from 'react-icons/ai';
+import { AiFillHome, AiOutlineSearch } from 'react-icons/ai';
 import { CgProfile } from 'react-icons/cg';
 import { BsFillChatQuoteFill } from 'react-icons/bs';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
@@ -36,11 +36,6 @@ const NavBar = () => {
 
   return (
     <Flex justifyContent="space-around" alignItems="center" mt={6} mb={12}>
-      {user && (
-        <Link as={NavLink} to="/">
-          <AiFillHome size={24} />
-        </Link>
-      )}
       <Image
         cursor="pointer"
         alt="logo"
@@ -48,10 +43,17 @@ const NavBar = () => {
         onClick={toggleColorMode}
         src={colorMode === 'light' ? dark : light}
       />
+
       {user && (
         <>
+          <Link as={NavLink} to="/">
+            <AiFillHome size={24} />
+          </Link>
           <Link as={NavLink} to={`/${user.username}`}>
             <CgProfile size={24} />
+          </Link>
+          <Link as={NavLink} to={`/search`}>
+            <AiOutlineSearch size={24} />
           </Link>
           <Link as={NavLink} to={`/chat`}>
             <BsFillChatQuoteFill size={20} />

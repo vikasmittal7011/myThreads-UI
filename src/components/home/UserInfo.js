@@ -24,7 +24,7 @@ const UserInfo = ({ user, updateUserFollowing }) => {
 
   return (
     <Flex gap={2} justifyContent="space-between" alignItems="center" mb="3">
-      <Flex gap={2} as={Link} to={`${user?.username}`}>
+      <Flex gap={2} as={Link} to={`/${user?.username}`}>
         <Avatar src={user?.image} />
         <Box>
           <Text fontSize="sm" fontWeight="bold">
