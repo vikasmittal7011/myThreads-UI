@@ -3,7 +3,6 @@ import {
   Box,
   Button,
   Flex,
-  Link,
   Menu,
   MenuButton,
   MenuItem,
@@ -13,7 +12,7 @@ import {
   VStack,
   useColorModeValue,
 } from '@chakra-ui/react';
-import { AiOutlineInstagram } from 'react-icons/ai';
+// import { AiOutlineInstagram } from 'reacts-icons/ai';
 import { CgMoreO } from 'react-icons/cg';
 import { Link as NavLink } from 'react-router-dom';
 
@@ -42,7 +41,7 @@ const Header = ({ user, handleFollowAndUnfollow, loading }) => {
           </Text>
           <Flex alignItems="center" gap={2}>
             <Text fontSize="sm">{user?.username}</Text>
-            <Text
+            {/* <Text
               fontSize="xs"
               bg={'gray.dark'}
               color={'gray.light'}
@@ -50,14 +49,17 @@ const Header = ({ user, handleFollowAndUnfollow, loading }) => {
               borderRadius={'xl'}
             >
               tag
-            </Text>
+            </Text> */}
           </Flex>
         </Box>
+
         <Box>
           <Avatar src={user?.image} size={'xl'} name={user?.name} />
         </Box>
       </Flex>
+
       <Text fontSize="xl">{user?.bio}</Text>
+
       {user?.id === userInfo?.id ? (
         <Button
           bg={color}
@@ -81,20 +83,21 @@ const Header = ({ user, handleFollowAndUnfollow, loading }) => {
           {user?.followers?.includes(userInfo?.id) ? 'UnFollow' : 'Follow'}
         </Button>
       )}
+
       <Flex width={'full'} justifyContent={'space-between'}>
         <Flex gap={2} alignItems={'center'}>
           <Text fontSize="md" color={'gray.light'}>
-            {user?.followers?.length} Follow
+            {user?.followers?.length} Followers
           </Text>
           <Box width={1} height={1} bg={'gray.light'} borderRadius={'full'} />
-          <Link cursor={'pointer'} fontSize="md" color={'gray.light'}>
-            link
-          </Link>
+          <Text fontSize="md" color={'gray.light'}>
+            {user?.following?.length} Following
+          </Text>
         </Flex>
         <Flex>
-          <Box className="icon-container">
+          {/* <Box className="icon-container">
             <AiOutlineInstagram size={24} cursor={'pointer'} />
-          </Box>
+          </Box> */}
           <Menu>
             <MenuButton className="icon-container">
               <CgMoreO size={24} cursor={'pointer'} />
